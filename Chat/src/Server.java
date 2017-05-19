@@ -25,8 +25,10 @@ public class Server extends Application{
     Button sendButton;
     TextField typeSpace;
     String currMessage;
-    ServerSocket serverS;
+    BorderPane layout;
+    Label msgDisplay;
     Socket s;
+    ServerSocket serverS;
     DataInputStream streamIn;
     DataOutputStream streamOut;
 
@@ -44,23 +46,49 @@ public class Server extends Application{
         sendButton.setOnAction(e -> {
             currMessage = typeSpace.getText();
             typeSpace.clear();
+            try {
+                streamOut.writeBytes(currMessage);
+            } catch (Exception f) {
+            }
         });
 
         //create layout and set new scene
-        BorderPane layout = new BorderPane();
+        layout = new BorderPane();
+        msgDisplay = new Label();
         HBox tempbox = new HBox();
         tempbox.getChildren().addAll(typeSpace, sendButton);
         layout.setBottom(tempbox);
-
+        layout.setTop(msgDisplay);
         Scene newscene = new Scene(layout);
         primaryStage.setScene(newscene);
+        connect();
         primaryStage.show();
 
     }
     public static void main(String[] args ){
         launch();
-        try {
 
+    }
+
+    public void connect() {
+        //incoming message
+        String newMsg;
+        try {
+            //make server socket and look for available client sockets
+            serverS = new ServerSocket(81);
+            s = serverS.accept();
+            streamIn = new DataInputStream(s.getInputStream());
+            streamOut = new DataOutputStream(s.getOutputStream());
+
+            //loop to display all incoming messages
+            while (true) {
+                newMsg = streamIn.readUTF();
+                msgDisplay.setText(msgDisplay.getText() + '\n' + newMsg);
+                System.out.println(s.getLocalAddress());
+                System.out.println(s.getLocalPort());
+                System.out.println(s.getLocalAddress().getHostName());
+
+            }
 
         } catch(Exception e) {
 
