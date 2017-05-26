@@ -29,7 +29,7 @@ public class ServerGUI extends Application {
         input.setOnAction(event -> {
             String msg = input.getText();
             input.clear();
-            msgDisplay.appendText(msg + "\n");
+            msgDisplay.appendText("Server: " + msg + "\n");
             try {
                 server.send(msg);
             } catch (Exception e) {

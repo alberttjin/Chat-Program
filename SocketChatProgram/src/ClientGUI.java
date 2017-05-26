@@ -29,7 +29,7 @@ public class ClientGUI extends Application {
         input.setOnAction(event -> {
             String msg = input.getText();
             input.clear();
-            msgDisplay.appendText(msg + "\n");
+            msgDisplay.appendText("Client: " + msg + "\n");
             try {
                 client.send(msg);
             } catch (Exception e) {

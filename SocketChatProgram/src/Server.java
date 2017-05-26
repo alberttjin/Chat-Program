@@ -34,7 +34,6 @@ public class Server {
 
     private class ServerThread implements Runnable{
         private ServerSocket ss;
-        private Socket s;
         private PrintWriter pw;
         private Scanner sc;
 
@@ -42,13 +41,15 @@ public class Server {
         public void run() {
             try {
                 ss = new ServerSocket(1001);
-                s = ss.accept();
-                System.out.println("connection established");
-                pw = new PrintWriter(s.getOutputStream());
-                sc = new Scanner(s.getInputStream()).useDelimiter("\\A");
                 while (true) {
-                    if (sc.hasNextLine()) {
-                        msgDisplay.appendText(sc.nextLine() + "\n");
+                    Socket s = ss.accept();
+                    System.out.println("connection established");
+                    pw = new PrintWriter(s.getOutputStream());
+                    sc = new Scanner(s.getInputStream()).useDelimiter("\\A");
+                    while (true) {
+                        if (sc.hasNextLine()) {
+                            msgDisplay.appendText("Client: " + sc.nextLine() + "\n");
+                        }
                     }
                 }
 

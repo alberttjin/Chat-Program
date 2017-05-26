@@ -44,13 +44,13 @@ public class Client {
         @Override
         public void run() {
             try {
-                s = new Socket("localhost", 1001);
+                s = new Socket("10.0.0.20", 1001);
                 System.out.println("connection established");
                 pw = new PrintWriter(s.getOutputStream());
                 sc = new Scanner(s.getInputStream()).useDelimiter("\\A");
                 while (true) {
                     if (sc.hasNextLine()) {
-                        msgDisplay.appendText(sc.nextLine() + "\n");
+                        msgDisplay.appendText("Server: " + sc.nextLine() + "\n");
                     }
                 }
 
