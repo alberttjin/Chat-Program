@@ -13,14 +13,12 @@ import java.util.Scanner;
  * Created by Albert Jin on 5/23/2017.
  */
 public class Client {
-    Node n;
     ClientThread t;
     TextArea msgDisplay;
     Thread t1;
 
     Client(TextArea msgDisplay) {
         this.msgDisplay = msgDisplay;
-        n = new Node();
         t = new ClientThread();
         t1 = new Thread(t);
         t1.setDaemon(true);
