@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  */
 public class ServerGUI extends Application {
     private TextArea msgDisplay = new TextArea();
-    Server server = new Server(msgDisplay);
+    Server server = new Server();
 
     public void init() {
         server.start();
@@ -31,7 +31,7 @@ public class ServerGUI extends Application {
             input.clear();
             msgDisplay.appendText("Server: " + msg + "\n");
             try {
-                server.send(msg);
+                server.send(msg, null);
             } catch (Exception e) {
                 System.out.println("Client not connected");
             }

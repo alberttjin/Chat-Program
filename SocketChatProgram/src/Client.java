@@ -16,8 +16,10 @@ public class Client {
     ClientThread t;
     TextArea msgDisplay;
     Thread t1;
+    String username;
 
-    Client(TextArea msgDisplay) {
+    Client(TextArea msgDisplay, String username) {
+        this.username = username;
         this.msgDisplay = msgDisplay;
         t = new ClientThread();
         t1 = new Thread(t);
@@ -29,7 +31,7 @@ public class Client {
     }
 
     public void send(String msg) {
-        t.pw.println(msg);
+        t.pw.println(username + ": " + msg);
         t.pw.flush();
         System.out.println("sent");
     }
@@ -42,13 +44,13 @@ public class Client {
         @Override
         public void run() {
             try {
-                s = new Socket("10.0.0.20", 1001);
+                s = new Socket("73.83.147.90", 1001);
                 System.out.println("connection established");
                 pw = new PrintWriter(s.getOutputStream());
-                sc = new Scanner(s.getInputStream()).useDelimiter("\\A");
+                sc = new Scanner(s.getInputStream());
                 while (true) {
                     if (sc.hasNextLine()) {
-                        msgDisplay.appendText("Server: " + sc.nextLine() + "\n");
+                        msgDisplay.appendText(sc.nextLine() + "\n");
                     }
                 }
 
