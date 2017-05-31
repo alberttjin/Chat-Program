@@ -3,6 +3,7 @@ import javafx.scene.control.TextArea;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -25,25 +26,27 @@ public class Server {
     }
 
     public void send(String msg) {
-        t.pw.println(msg);
-        t.pw.flush();
+        for (PrintWriter elem: t.pw) {
+            elem.println(msg);
+            elem.flush();
+        }
         System.out.println("sent");
     }
 
     private class ServerThread implements Runnable{
         private ServerSocket ss;
         private Socket s;
-        private PrintWriter pw;
-        private Scanner sc;
+        private ArrayList<PrintWriter> pw;
 
         @Override
         public void run() {
             try {
+                pw = new ArrayList<>();
+                ss = new ServerSocket(1001);
                 while (true) {
-                    ss = new ServerSocket(1001);
                     s = ss.accept();
-                    pw = new PrintWriter(s.getOutputStream());
-                    System.out.println("connection established");
+                    pw.add(new PrintWriter(s.getOutputStream()));
+                    System.out.println("new connection established");
                     /*pw = new PrintWriter(s.getOutputStream());
                     sc = new Scanner(s.getInputStream()).useDelimiter("\\A");
                     while (true) {
@@ -57,6 +60,7 @@ public class Server {
 
             } catch (Exception e) {
                 System.out.println(e);
+                System.out.println("here");
             }
         }
     }
@@ -77,6 +81,7 @@ public class Server {
                 while (true) {
                     if (sc.hasNextLine()) {
                         msgDisplay.appendText("Client: " + sc.nextLine() + "\n");
+                        //send(sc.nextLine() + "\n");
                     }
                 }
             } catch (Exception e) {
